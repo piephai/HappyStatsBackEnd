@@ -3,6 +3,7 @@ const { routes } = require('../app');
 var router = express.Router();
 const getRankings = require('./rankings');
 const getCountries = require('./countries');
+const getFactors = require('./factors');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -15,7 +16,9 @@ router.get('/api', function (req, res, next) {
 
 router.get('/rankings', getRankings);
 
-router.get('/countries', getCountries)
+router.get('/countries', getCountries);
+
+router.get('/factors', getFactors);
 
 
 router.get('/api/city/:CountryCode', function (req, res, next) {
