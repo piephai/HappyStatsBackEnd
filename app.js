@@ -24,12 +24,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-logger.token('req', (req, res) => JSON.stringify(req.headers))
-logger.token('res', (req, res) => {
-  const headers = {}
-  res.getHeaderNames.map(h => headers[h] = res.getHeader(h))
-  return JSON.stringify(headers);
-});
+// logger.token('req', (req, res) => JSON.stringify(req.headers))
+// logger.token('res', (req, res) => {
+//   const headers = {}
+//   res.getHeaderNames.map(h => headers[h] = res.getHeader(h))
+//   return JSON.stringify(headers);
+// });
 
 const options = require('./knexfile');
 const knex = require('knex')(options);
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

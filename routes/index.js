@@ -18,7 +18,7 @@ router.get('/rankings', getRankings);
 
 router.get('/countries', getCountries);
 
-router.get('/factors', getFactors);
+router.get('/factors/:year', getFactors);
 
 
 router.get('/api/city/:CountryCode', function (req, res, next) {
