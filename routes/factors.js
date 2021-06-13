@@ -1,3 +1,5 @@
+const { JsonWebTokenError } = require("jsonwebtoken");
+
 /* Get rankings */
 async function getFactors(req, res, next) {
 
@@ -8,6 +10,34 @@ async function getFactors(req, res, next) {
     const propertiesToReturn = ["rank", "country", "score", "economy", "family", "health", "freedom", "generosity", "trust"];
 
     //TODO: Check authorisation token
+  
+    const authorisation = req.headers.authorisation
+    let token = null;
+
+    if (!(authorisation && authorisation.split(" ").length === 2)){
+        return res.status(401).json({ "Error": true, "Message": "Invalid JWT" })
+    }
+
+    //Check if auth header is missing if it is then throw 401
+    if (!req.headers.authorisation || req.headers.authorisation.indexOf('Bearer ' === -1)) {
+        return res.status(401).json({ "Error": true, "Message": "Authorization header ('Bearer token') not found" })
+    }
+
+    token = authorisation.split(" ")[1];
+    //TODO: Check if JWT token is valid if it is not then throw 401
+    try{
+        const decoded = jwt.verify(token, "_0a,i^6ot1u;jz|v}ng3>Yf(L=Re6D");             
+        //Check if token is expired if it is then throw 401
+        if (decoded.exp < dateNow.getTime() / 1000) {
+            return res.status(401).json({ "Error": true, "Message": "JWT token has expired" })
+        }
+        next();
+    }
+    catch(e){
+        return res.status(401).json({ "Error": true, "Message": "Authorisation header is malformed" })
+    }
+
+   
 
     //Check if query paramter of year contain only numbers if does not then send back a 400 response
     if (!(req.params.year.match(/^[0-9]+$/)) || req.params.year.length != 4) {
@@ -29,18 +59,7 @@ async function getFactors(req, res, next) {
             return res.status(400).json({ "Error": true, "Message": "Invalid limit query. Limit must be a positive number" })
         }
     }
-    // //Check if auth header is missing if it is then throw 401
-    // if (!req.headers.authorisation || req.headers.authorisation.indexOf('Bearer ' === -1)) {
-    //     return res.status(401).json({ "Error": true, "Message": "Authorization header ('Bearer token') not found" })
-    // }
 
-
-    // //Check if token is expired if it is then throw 401
-    // if (req.headers.authorisation && req.headers.authorisation.exp < dateNow.getTime() / 1000) {
-    //     return res.status(401).json({ "Error": true, "Message": "JWT token has expired" })
-    // }
-
-    //TODO: Check if JWT token is valid if it is not then throw 401
 
     //TODO: Check if authorisation header is malformed
 

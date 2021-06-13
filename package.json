@@ -13,7 +13,7 @@
     "express": "~4.16.1",
     "helmet": "^4.6.0",
     "http-errors": "~1.6.3",
-    "jade": "^1.9.2",
+    "jade": "^0.31.2",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.6",
     "morgan": "~1.9.1",
