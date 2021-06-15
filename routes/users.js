@@ -47,7 +47,8 @@ router.post('/login', function (req, res, next) {
       })
     }
     //If passwords match, return JWT token
-    const secretKey = "_0a,i^6ot1u;jz|v}ng3>Yf(L=Re6D";
+    try {
+    const secretKey = "_0a,i^6ot1u;jz|v}ng3>YfL=Re6D";
     const expires_in = 60 * 60 * 24 // 1 day
     const exp = Date.now() + expires_in * 1000
     const token = jwt.sign({email, exp}, secretKey);
@@ -56,8 +57,11 @@ router.post('/login', function (req, res, next) {
       token: token,
       expires_in: expires_in
     })
-  })
-
+  }
+  catch (e){
+    // return res.status(401).json({ "Error": true, "Message": "Authorisation header is malformed" })
+  }
+  });
 });
 
 router.post('/register', function (req, res, next) {
@@ -82,12 +86,13 @@ router.post('/register', function (req, res, next) {
         message: "User already exists"
       })
     }
+    console.log("Made it to here");
   
    // If user does not exist, insert into table
     const hash = bcrypt.hashSync(password, saltRounds);
     req.db.from("users").insert({email, hash}).then(() => {
       return res.status(201).json({
-        message: "User created"
+        message: "Created"
       })
     }).catch((err) => {
       return res.json({ "Error": true, "Message": err.Message })
@@ -96,12 +101,12 @@ router.post('/register', function (req, res, next) {
 });
 
 router.get('/:email/profile', function (req, res, next) {
-  res.render('index', { title: 'User profile' });
+  return res.render('index', { title: 'User profile' });
   //TODO: Get profile of a particular user
 });
 
 router.put('/:email/profile', function (req, res, next) {
-  res.render('index', { title: 'User profile put' });
+  return res.render('index', { title: 'User profile put' });
   //TODO: Get profile of a particular user
 });
 

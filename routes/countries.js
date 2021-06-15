@@ -1,14 +1,23 @@
-async function getRankings(req, res, next) {
+const getCountries = (req, res, next) => {
 
     if (Object.keys(req.query).length > 0) {
         res.status(400).json({ "Error": true, "Message": "Invalid query parameters. Query parameters are not permitted" })
     }
 
     else {
-        req.db.from('rankings').select("country").then((rows) => {
-            res.status(200).json({ rows });
+      
+        req.db.from('rankings').select("country").distinct().orderBy('country').then((rows) => {
+            let countries = [];
+            if (rows.length > 0){
+                for(let row of rows){
+                    countries.push(row.country);
+                }
+                
+            }
+            return res.status(200).json( countries );
+            
         }).catch((err) => {
-            res.json({ "Error": true, "Message": err.Message })
+            return res.json({ "error": true, "message": err.Message })
 
         })
     }
@@ -18,4 +27,4 @@ async function getRankings(req, res, next) {
 
 }
 
-module.exports = getRankings;
+module.exports = getCountries;
