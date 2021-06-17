@@ -2,12 +2,8 @@ const jwt = require("jsonwebtoken");
 
 /* Get rankings */
 const authorise = (req, res, next) => {
-
-
-
-    //TODO: Check authorisation token
   
-    const authorisation = req.headers.authorization
+    const authorisation = req.headers.authorization;
     let token = null;
 
     //Check if auth header is missing if it is then throw 401
@@ -30,10 +26,29 @@ const authorise = (req, res, next) => {
         next();
         
     }
-    catch(e){
+    catch(err){
         return res.status(401).json({ error: true, message: "Invalid JWT token"})
     }
   
 }
 
-module.exports = authorise;
+const verifyUserID = (email, authorisation) => {
+    token =  authorisation.split(" ")[1];
+    try{
+        const decoded = jwt.verify(token, "_0a,i^6ot1u;jz|v}ng3>YfL=Re6D");             
+   
+        // Check if email matches the email within the JWT token
+        if (email === decoded.email){
+            return true;
+        }
+        return false;
+        
+    }
+    catch(err){
+        console.log("Error verifying jwt token")
+    }
+
+}
+
+
+module.exports = {authorise, verifyUserID};

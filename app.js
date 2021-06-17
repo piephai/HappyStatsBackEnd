@@ -3,19 +3,17 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const swaggerUI = require('swagger-ui-express');
-const swaggerDocument = require('./docs/swaggerapi.json');
+const swaggerDocument = require('./docs/swagger.json');
 const logger = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-
-
-
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 
 const app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

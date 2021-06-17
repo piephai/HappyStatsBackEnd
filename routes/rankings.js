@@ -23,10 +23,11 @@ const getRankings = (req, res, next) => {
     if (Object.keys(queryParameter).length > 2) {
         return res.status(400).json({ "error": true, "message": "Invalid query parameters. Only year and country are permitted" })
     }
+    //Select the specified properties from the rankings table within the DB and do any neccessary filter and then order by year descending
     req.db.from('rankings').select(propertiesToReturn).where(filter).orderBy('year', 'desc').then((rows) => {
         return res.status(200).json( rows );
-    }).catch((err) => {
-        return res.json({ "error": true, "message": err.Message })
+    }).catch(() => {
+        return res.status(400).json({error: true, message:"Error querying the database"})
     });
 }
 

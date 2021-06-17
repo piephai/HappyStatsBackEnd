@@ -1,11 +1,13 @@
+/*Get countries function with filtering*/
 const getCountries = (req, res, next) => {
 
+    //Get countries does no thave query parameters
     if (Object.keys(req.query).length > 0) {
         res.status(400).json({ "Error": true, "Message": "Invalid query parameters. Query parameters are not permitted" })
     }
 
     else {
-      
+        //Query the database for the countries
         req.db.from('rankings').select("country").distinct().orderBy('country').then((rows) => {
             let countries = [];
             if (rows.length > 0){
